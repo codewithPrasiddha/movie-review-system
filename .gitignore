@@ -1,0 +1,11 @@
+# Ignore environment files (contains secrets)
+.env
+
+# Ignore Python virtual environment
+venv/
+
+# Ignore all Docker cache and logs
+__pycache__/
+*.pyc
+*.pyo
+*.log
