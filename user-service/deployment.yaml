@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+      - name: user-service
+        image: user-service:latest
+        imagePullPolicy: Never
+        ports:
+          - containerPort: 8000
+        command: ["uvicorn"]  # ✅ Explicitly set the command
+        args: ["app:app", "--host", "0.0.0.0", "--port", "8000"]  # ✅ Run FastAPI properly
+        envFrom:
+          - configMapRef:
+              name: movie-review-config
+        env:
+          - name: SECRET_KEY  # ✅ Ensure SECRET_KEY is explicitly set
+            valueFrom:
+              configMapKeyRef:
+                name: movie-review-config
+                key: SECRET_KEY
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: movie-review-secret
+                key: POSTGRES_PASSWORD
