@@ -1,5 +1,5 @@
 # Test dependencies for development
-pytest==8.3.5
+pytest==7.4.2
 requests
 httpx
 anyio
