@@ -6,11 +6,10 @@ Architecture Overview
 
 The system is composed of 3 main services:
 
-Service          Description                                 Port
----------------  ------------------------------------------  -----
-User Service     Handles user registration, login & JWT auth  8001
-Movie Service    Manages movie catalog                        8002
-Review Service   Accepts and lists reviews per movie          8003
+Service           Description                            Port
+User Service      Handles user registration, login & JWT auth    8001
+Movie Service     Manages movie catalog                          8002
+Review Service    Accepts and lists reviews per movie            8003
 
 All services communicate over a shared Docker network and are orchestrated via Docker Compose.
 
@@ -70,36 +69,38 @@ docker compose up --build -d
 
 4. Verify Health
 
-curl http://localhost:8001/health   # User Service
-curl http://localhost:8002/health   # Movie Service
-curl http://localhost:8003/health   # Review Service
+curl http://localhost:8001/health    # User Service  
+curl http://localhost:8002/health    # Movie Service  
+curl http://localhost:8003/health    # Review Service
 
 API Endpoints
 
 User Service (port 8001)
-POST /register - Register new user
-POST /login - Obtain JWT token
-GET /protected - Auth-protected route
-GET /health - Health check
+- POST /register         Register new user
+- POST /login            Obtain JWT token
+- GET /protected         Auth-protected route
+- GET /health            Health check
 
 Movie Service (port 8002)
-POST /movies - Add a movie
-GET /movies - List all movies
-GET /movies/{movie_id} - Get movie by ID
-GET /health - Health check
+- POST /movies           Add a movie
+- GET /movies            List all movies
+- GET /movies/{id}       Get movie by ID
+- GET /health            Health check
 
 Review Service (port 8003)
-POST /reviews - Add a review
-GET /reviews/{movie_id} - Get reviews for a movie
-GET /health - Health check
+- POST /reviews          Add a review
+- GET /reviews/{id}      Get reviews for a movie
+- GET /health            Health check
 
 Running Unit Tests
 
 docker exec user-service pytest -v
 
-Tests are located in user-service/tests/test_user_app.py and include:
-- Register
-- Login
+Tests are located in:  
+user-service/tests/test_user_app.py  
+Includes tests for:  
+- Register  
+- Login  
 - Protected route access
 
 Shut Down All Services
