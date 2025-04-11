@@ -10,13 +10,20 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+
     services:
       postgres:
         image: postgres:13
         env:
-          POSTGRES_DB: movie_review_db
-          POSTGRES_USER: admin
-          POSTGRES_PASSWORD: secretsanta0123
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         ports:
           - 5432:5432
         options: >-
