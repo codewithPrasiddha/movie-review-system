@@ -1,12 +1,14 @@
+version: '3.8'
+
 services:
   db:
-    image: postgres:latest
+    image: postgres:13
     container_name: movie-review-db
     restart: always
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: secretsanta0123
-      POSTGRES_DB: movie_review_db
+      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secretsanta0123}
+      POSTGRES_DB: ${POSTGRES_DB:-movie_review_db}
     ports:
       - "5432:5432"
     volumes:
@@ -19,9 +21,12 @@ services:
       - "8001:8000"
     depends_on:
       - db
-    env_file:
-      - ./user-service/.env  
-      # Specify the correct path to the .env file
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secretsanta0123}
+      POSTGRES_DB: ${POSTGRES_DB:-movie_review_db}
+      POSTGRES_HOST: ${POSTGRES_HOST:-db}
+      SECRET_KEY: ${SECRET_KEY:-secretsanta}
     volumes:
       - ./user-service:/app
 
@@ -32,8 +37,11 @@ services:
       - "8002:8000"
     depends_on:
       - db
-    env_file:
-      - ./movie-service/.env # Specify the correct path to the .env file
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secretsanta0123}
+      POSTGRES_DB: ${POSTGRES_DB:-movie_review_db}
+      POSTGRES_HOST: ${POSTGRES_HOST:-db}
     volumes:
       - ./movie-service:/app
 
@@ -44,8 +52,11 @@ services:
       - "8003:8000"
     depends_on:
       - db
-    env_file:
-      - ./review-service/.env # Specify the correct path to the .env file
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secretsanta0123}
+      POSTGRES_DB: ${POSTGRES_DB:-movie_review_db}
+      POSTGRES_HOST: ${POSTGRES_HOST:-db}
     volumes:
       - ./review-service:/app
 
