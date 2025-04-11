@@ -7,6 +7,6 @@ spec:
     app: review-service
   ports:
     - protocol: TCP
-      port: 8003
+      port: 8000
       targetPort: 8000
   type: NodePort 

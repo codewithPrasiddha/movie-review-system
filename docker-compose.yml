@@ -1,13 +1,12 @@
-
 services:
   db:
     image: postgres:latest
     container_name: movie-review-db
     restart: always
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secretsanta0123
+      POSTGRES_DB: movie_review_db
     ports:
       - "5432:5432"
     volumes:
@@ -21,7 +20,8 @@ services:
     depends_on:
       - db
     env_file:
-      - .env
+      - ./user-service/.env  
+      # Specify the correct path to the .env file
     volumes:
       - ./user-service:/app
 
@@ -33,7 +33,7 @@ services:
     depends_on:
       - db
     env_file:
-      - .env
+      - ./movie-service/.env # Specify the correct path to the .env file
     volumes:
       - ./movie-service:/app
 
@@ -45,7 +45,7 @@ services:
     depends_on:
       - db
     env_file:
-      - .env
+      - ./review-service/.env # Specify the correct path to the .env file
     volumes:
       - ./review-service:/app
 

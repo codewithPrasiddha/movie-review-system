@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, Depends, Security
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from models import User, Base
-from database import SessionLocal, engine
+from database import SessionLocal, Base, engine
 import jwt
 import datetime
 import os
@@ -21,6 +21,8 @@ app = FastAPI()
 Base.metadata.create_all(bind=engine)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+
+
 
 def get_db():
     db = SessionLocal()
@@ -41,7 +43,7 @@ def verify_token(token: str = Security(oauth2_scheme)):
 
 # JWT Token Generation Function
 def create_token(username: str):
-    payload = {"sub": username, "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=2)}
+    payload = {"sub": username, "exp": datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=2)}
     return jwt.encode(payload, SECRET_KEY, algorithm="HS256")
 
 # Pydantic Models for Input Validation
@@ -69,11 +71,19 @@ def register(user: UserRegister, db: Session = Depends(get_db)):
 @app.post("/login")
 def login(user: UserLogin, db: Session = Depends(get_db)):
     found_user = db.query(User).filter(User.username == user.username).first()
-    if not found_user or found_user.password != user.password:
+    if not found_user:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+
+    # 🔍 Debug prints to see what's being compared
+    print("DB password:", repr(found_user.password))
+    print("Input password:", repr(user.password))
+
+    if found_user.password != user.password:
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     token = create_token(user.username)
     return {"access_token": token}
+
 
 # Protected Route
 @app.get("/protected-route")

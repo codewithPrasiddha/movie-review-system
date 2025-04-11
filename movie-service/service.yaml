@@ -7,6 +7,6 @@ spec:
     app: movie-service
   ports:
     - protocol: TCP
-      port: 8002
+      port: 8000
       targetPort: 8000
   type: NodePort 
