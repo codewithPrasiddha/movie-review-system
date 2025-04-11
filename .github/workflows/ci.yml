@@ -37,6 +37,7 @@ jobs:
         echo "POSTGRES_PORT=5432" >> $GITHUB_ENV
         echo "SECRET_KEY=secretsanta" >> $GITHUB_ENV
         echo "DATABASE_URL=postgresql://admin:secretsanta0123@db:5432/movie_review_db" >> $GITHUB_ENV
+        echo "BASE_URL=http://user-service:8000" >> $GITHUB_ENV
 
     - name: Start all microservices
       run: docker compose up -d --build

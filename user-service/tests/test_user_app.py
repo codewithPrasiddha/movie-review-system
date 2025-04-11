@@ -6,7 +6,8 @@ import os
 import uuid
 
 # Use service name inside Docker network
-BASE_URL = "http://localhost:8001"
+
+BASE_URL = os.getenv("BASE_URL", "http://localhost:8001")  # default for local testing
 
 
 def test_register():
