@@ -6,7 +6,7 @@ import os
 import uuid
 
 # Correct BASE_URL: points to container hostname in CI, or localhost in dev
-BASE_URL = os.getenv("BASE_URL", "http://user-service:8000")  # works inside Docker and locally
+BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")  # works inside Docker and locally
 
 
 def test_register():
