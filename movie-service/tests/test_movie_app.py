@@ -1,6 +1,7 @@
 import requests
+import os
 
-BASE_URL = "http://127.0.0.1:8002"
+BASE_URL = os.getenv("BASE_URL", "http://localhost:8002")
 
 def test_add_movie():
     movie = {
