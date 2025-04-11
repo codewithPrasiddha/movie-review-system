@@ -22,8 +22,6 @@ Base.metadata.create_all(bind=engine)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
-
-
 def get_db():
     db = SessionLocal()
     try:
@@ -43,10 +41,13 @@ def verify_token(token: str = Security(oauth2_scheme)):
 
 # JWT Token Generation Function
 def create_token(username: str):
-    payload = {"sub": username, "exp": datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=2)}
+    payload = {
+        "sub": username,
+        "exp": datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=2)
+    }
     return jwt.encode(payload, SECRET_KEY, algorithm="HS256")
 
-# Pydantic Models for Input Validation
+# Pydantic Models
 class UserRegister(BaseModel):
     username: str
     password: str
@@ -55,37 +56,27 @@ class UserLogin(BaseModel):
     username: str
     password: str
 
-# User Registration
+# Register Endpoint
 @app.post("/register")
 def register(user: UserRegister, db: Session = Depends(get_db)):
     existing_user = db.query(User).filter(User.username == user.username).first()
     if existing_user:
         raise HTTPException(status_code=400, detail="User already exists")
-
     new_user = User(username=user.username, password=user.password)
     db.add(new_user)
     db.commit()
     return {"message": "User registered successfully"}
 
-# User Login
+# Login Endpoint
 @app.post("/login")
 def login(user: UserLogin, db: Session = Depends(get_db)):
     found_user = db.query(User).filter(User.username == user.username).first()
-    if not found_user:
+    if not found_user or found_user.password != user.password:
         raise HTTPException(status_code=401, detail="Invalid credentials")
-
-    # 🔍 Debug prints to see what's being compared
-    print("DB password:", repr(found_user.password))
-    print("Input password:", repr(user.password))
-
-    if found_user.password != user.password:
-        raise HTTPException(status_code=401, detail="Invalid credentials")
-
     token = create_token(user.username)
     return {"access_token": token}
 
-
 # Protected Route
-@app.get("/protected-route")
-def protected_route(user: dict = Depends(verify_token)):
+@app.get("/protected")
+def protected(user: dict = Depends(verify_token)):
     return {"message": f"Access granted for {user['sub']}"}

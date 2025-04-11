@@ -2,8 +2,8 @@ import requests
 import time
 
 
-BASE_URL_USER = "http://user-service:8000"
-BASE_URL_REVIEW = "http://review-service:8000"
+BASE_URL_USER = "http://localhost:8001"   
+BASE_URL_REVIEW = "http://localhost:8003" 
 
 def get_token():
     requests.post(f"{BASE_URL_USER}/register", json={"username": "john", "password": "pass123"})

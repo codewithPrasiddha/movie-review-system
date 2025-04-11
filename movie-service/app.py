@@ -20,3 +20,7 @@ def add_movie(movie: Movie):
 @app.get("/movies/{movie_id}")
 def get_movie(movie_id: int):
     return movies_db.get(movie_id, {"message": "Movie not found"})
+
+@app.get("/movies")  
+def get_all_movies():
+    return movies_db

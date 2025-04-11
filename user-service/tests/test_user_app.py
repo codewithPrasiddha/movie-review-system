@@ -6,7 +6,7 @@ import os
 import uuid
 
 # Use service name inside Docker network
-BASE_URL = "http://user-service:8000"
+BASE_URL = "http://localhost:8001"
 
 
 def test_register():

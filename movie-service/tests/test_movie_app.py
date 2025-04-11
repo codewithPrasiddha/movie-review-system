@@ -1,7 +1,7 @@
 import requests
 
 
-BASE_URL = "http://movie-service:8000"
+BASE_URL = "http://localhost:8002"
 
 
 def test_add_movie():

@@ -60,17 +60,6 @@ services:
     volumes:
       - ./review-service:/app
 
-  test-runner:
-    build: .
-    container_name: test-runner
-    depends_on:
-      - user-service
-      - movie-service
-      - review-service
-    volumes:
-      - .:/app
-    working_dir: /app
-    entrypoint: ["tail", "-f", "/dev/null"]
 
 volumes:
   postgres_data:
