@@ -8,6 +8,10 @@ import datetime
 import os
 from dotenv import load_dotenv
 from fastapi.security import OAuth2PasswordBearer
+from prometheus_fastapi_instrumentator import Instrumentator
+from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
+
+
 
 # Load environment variables (both in local and inside Docker)
 dotenv_path = "/app/.env"
@@ -18,6 +22,8 @@ SECRET_KEY = os.getenv("SECRET_KEY", "defaultsecretkey")
 
 app = FastAPI()
 
+# Attach Prometheus instrumentator
+Instrumentator().instrument(app).expose(app)
 # Create DB tables
 Base.metadata.create_all(bind=engine)
 
@@ -87,3 +93,7 @@ def protected(user: dict = Depends(verify_token)):
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+@app.get("/metrics")
+def metrics():
+    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
