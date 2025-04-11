@@ -1,5 +1,5 @@
 # Ignore environment files (contains secrets)
-.env
+#.env
 
 # Ignore Python virtual environment
 venv/
