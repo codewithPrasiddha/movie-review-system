@@ -53,7 +53,7 @@ jobs:
         done
 
     - name: Run tests from user-service
-      run: docker exec user-service bash -c "source venv/bin/activate && pytest -v"
+      run: docker exec user-service pytest -v
 
     - name: Tear down
       run: docker compose down
