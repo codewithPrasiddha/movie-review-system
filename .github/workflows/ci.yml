@@ -57,9 +57,9 @@ jobs:
 
     - name: Run tests from user-service
       run: |
-        docker exec -e BASE_URL_USER=http://user-service:8000 \
+        docker exec -e BASE_URL=http://user-service:8000 \
+                -e BASE_URL_USER=http://user-service:8000 \
                 -e BASE_URL_REVIEW=http://review-service:8000 \
-                -e BASE_URL=http://movie-service:8000 \
                 user-service pytest -v
 
     - name: Tear down
