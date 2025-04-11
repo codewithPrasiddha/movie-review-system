@@ -83,3 +83,7 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
 @app.get("/protected")
 def protected(user: dict = Depends(verify_token)):
     return {"message": f"Access granted for {user['sub']}"}
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}

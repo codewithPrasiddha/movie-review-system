@@ -24,3 +24,7 @@ def get_movie(movie_id: int):
 @app.get("/movies")  
 def get_all_movies():
     return movies_db
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}

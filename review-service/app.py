@@ -19,3 +19,7 @@ def add_review(review: Review):
 @app.get("/reviews/{movie_id}")
 def get_reviews(movie_id: int):
     return [review for review in reviews_db if review["movie_id"] == movie_id]
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
