@@ -9,8 +9,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-admin}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secretsanta0123}
       POSTGRES_DB: ${POSTGRES_DB:-movie_review_db}
-    ports:
-      - "${DOCKER_DB_PORT:-5432}:5432"
+   # ports:
+     # - "${DOCKER_DB_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
