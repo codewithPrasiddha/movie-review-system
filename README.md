@@ -1,7 +1,3 @@
-To make that README look proper and nice on GitHub, you need to format it using Markdown syntax—especially for headings, code blocks, and lists.
-
-Here is the corrected version for you to copy and paste directly into the GitHub README editor. It will render cleanly on the page:
-
 # Movie Review System
 
 A microservices-based application built with FastAPI, Docker, and PostgreSQL, allowing users to register, log in, add movies, and post reviews.
