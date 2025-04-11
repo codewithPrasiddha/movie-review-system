@@ -28,18 +28,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
-
-    - name: Install dependencies
-      run: |
-        python -m venv venv
-        source venv/bin/activate
-        pip install -r requirements.txt
-        pip install pytest requests
-
     - name: Set environment variables
       run: |
         echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> $GITHUB_ENV
@@ -49,16 +37,12 @@ jobs:
         echo "POSTGRES_PORT=5432" >> $GITHUB_ENV
         echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
         echo "DOCKER_DB_PORT=5432" >> $GITHUB_ENV
-        echo "BASE_URL_USER=http://user-service:8000" >> $GITHUB_ENV
-        echo "BASE_URL_REVIEW=http://review-service:8000" >> $GITHUB_ENV
 
-    - name: Start all microservices
+    - name: Start microservices and test runner
       run: docker compose up -d --build
 
-    - name: Wait for services to boot
-      run: sleep 15
+    - name: Wait for services to be ready
+      run: sleep 20
 
-    - name: Run tests
-      run: |
-        source venv/bin/activate
-        pytest -v
+    - name: Run tests inside test-runner container
+      run: docker exec test-runner bash -c "source venv/bin/activate && pytest -v"

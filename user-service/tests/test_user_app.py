@@ -5,7 +5,9 @@ import time
 import os
 import uuid
 
-BASE_URL = os.getenv("BASE_URL", "http://localhost:8001")
+# Use service name inside Docker network
+BASE_URL = "http://user-service:8000"
+
 
 def test_register():
     unique_username = f"newuser_{uuid.uuid4().hex[:8]}"  # Generate a unique username
