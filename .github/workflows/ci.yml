@@ -57,10 +57,10 @@ jobs:
 
     - name: Health check endpoints
       run: |
-       curl --fail http://user-service:8000/health
-       curl --fail http://movie-service:8000/health
-       curl --fail http://review-service:8000/health
-       
+       docker exec user-service curl --fail http://localhost:8000/health
+       docker exec movie-service curl --fail http://localhost:8000/health
+       docker exec review-service curl --fail http://localhost:8000/health
+
     - name: Run tests from user-service
       run: |
         docker exec -e BASE_URL=http://user-service:8000 \
