@@ -46,8 +46,8 @@ jobs:
     - name: Wait for services to be ready
       run: sleep 25
 
-    - name: Run tests inside test-runner container
-      run: docker exec test-runner bash -c "source venv/bin/activate && pytest -v"
+    - name: Run tests inside user-service container
+      run: docker exec user-service pytest -v
 
     - name: Tear down containers
       if: always()
