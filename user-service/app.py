@@ -9,7 +9,7 @@ import os
 from dotenv import load_dotenv
 from fastapi.security import OAuth2PasswordBearer
 
-# Load environment variables
+# Load environment variables (both in local and inside Docker)
 dotenv_path = "/app/.env"
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
@@ -18,10 +18,13 @@ SECRET_KEY = os.getenv("SECRET_KEY", "defaultsecretkey")
 
 app = FastAPI()
 
+# Create DB tables
 Base.metadata.create_all(bind=engine)
 
+# OAuth2 scheme for extracting bearer token
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
+# DB Dependency
 def get_db():
     db = SessionLocal()
     try:
@@ -29,7 +32,7 @@ def get_db():
     finally:
         db.close()
 
-# Function to verify JWT token
+# Token verification
 def verify_token(token: str = Security(oauth2_scheme)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
@@ -39,7 +42,7 @@ def verify_token(token: str = Security(oauth2_scheme)):
     except jwt.InvalidTokenError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
-# JWT Token Generation Function
+# Token generation
 def create_token(username: str):
     payload = {
         "sub": username,
