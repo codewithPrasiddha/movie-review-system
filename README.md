@@ -1,24 +1,28 @@
 Movie Review System
 
-This is a microservices-based Movie Review System built using FastAPI, PostgreSQL, Docker, and Docker Compose. The system allows users to register and log in, add movies, and post reviews for those movies.
+A microservices-based application built with FastAPI, Docker, and PostgreSQL, allowing users to register, log in, add movies, and post reviews.
 
-Project Architecture
+Architecture Overview
 
-The system consists of the following microservices:
-	1.	User Service – Handles user registration, login, and authentication using JWT.
-	2.	Movie Service – Allows adding new movies and retrieving movie details.
-	3.	Review Service – Enables posting and retrieving reviews for movies.
+The system is composed of 3 main services:
 
-Each service runs in its own container and communicates over a Docker network. PostgreSQL is used as the backend database for the user service.
+Service          Description                                 Port
+---------------  ------------------------------------------  -----
+User Service     Handles user registration, login & JWT auth  8001
+Movie Service    Manages movie catalog                        8002
+Review Service   Accepts and lists reviews per movie          8003
+
+All services communicate over a shared Docker network and are orchestrated via Docker Compose.
 
 Technologies Used
-	•	Python 3.9
-	•	FastAPI
-	•	PostgreSQL
-	•	Docker & Docker Compose
-	•	Uvicorn (ASGI Server)
-	•	Pytest (for testing)
-	•	dotenv (for managing environment variables)
+
+- Python 3.9
+- FastAPI
+- PostgreSQL (for User Service)
+- Docker & Docker Compose
+- Uvicorn
+- Pytest
+- dotenv
 
 Folder Structure
 
@@ -27,8 +31,7 @@ movie-review-system/
 │   ├── app.py
 │   ├── models.py
 │   ├── database.py
-│   ├── tests/
-│   │   └── test_user_app.py
+│   ├── tests/test_user_app.py
 │   ├── requirements.txt
 │   ├── Dockerfile
 │   └── wait-for-db.sh
@@ -43,7 +46,7 @@ movie-review-system/
 ├── docker-compose.yml
 └── .env
 
-How to Run
+Getting Started
 
 1. Clone the Repository
 
@@ -61,52 +64,54 @@ BASE_URL_USER=http://user-service:8000
 BASE_URL_REVIEW=http://review-service:8000
 BASE_URL=http://movie-service:8000
 
-3. Start the Project
+3. Start All Services
 
 docker compose up --build -d
 
-4. Check Health Endpoints
+4. Verify Health
 
-curl http://localhost:8001/health  # User Service
-curl http://localhost:8002/health  # Movie Service
-curl http://localhost:8003/health  # Review Service
+curl http://localhost:8001/health   # User Service
+curl http://localhost:8002/health   # Movie Service
+curl http://localhost:8003/health   # Review Service
 
 API Endpoints
 
-User Service (localhost:8001)
-	•	POST /register – Register a new user
-	•	POST /login – Log in and get JWT token
-	•	GET /protected – Protected route (JWT required)
-	•	GET /health – Health check
+User Service (port 8001)
+POST /register - Register new user
+POST /login - Obtain JWT token
+GET /protected - Auth-protected route
+GET /health - Health check
 
-Movie Service (localhost:8002)
-	•	POST /movies – Add a new movie
-	•	GET /movies – List all movies
-	•	GET /movies/{movie_id} – Get movie by ID
-	•	GET /health – Health check
+Movie Service (port 8002)
+POST /movies - Add a movie
+GET /movies - List all movies
+GET /movies/{movie_id} - Get movie by ID
+GET /health - Health check
 
-Review Service (localhost:8003)
-	•	POST /reviews – Submit a review
-	•	GET /reviews/{movie_id} – Get reviews for a movie
-	•	GET /health – Health check
+Review Service (port 8003)
+POST /reviews - Add a review
+GET /reviews/{movie_id} - Get reviews for a movie
+GET /health - Health check
 
-Running Tests
-
-To run the unit tests inside the user-service container:
+Running Unit Tests
 
 docker exec user-service pytest -v
 
-Tests included:
-	•	test_register
-	•	test_login
-	•	test_protected_route
+Tests are located in user-service/tests/test_user_app.py and include:
+- Register
+- Login
+- Protected route access
 
-Shut Down
+Shut Down All Services
 
 docker compose down
 
 Notes
-	•	Only the User Service persists data using PostgreSQL.
-	•	The Movie and Review Services use in-memory data for simplicity.
-	•	Intended for educational/demo purposes.
-	•	For production, consider using persistent databases, secret managers, and Kubernetes.
+
+- Only the User Service uses PostgreSQL; others use in-memory storage for simplicity.
+- All APIs are written with FastAPI and return standard JSON responses.
+- This project is intended for educational/demo purposes.
+
+License
+
+This project is open-source and free to use.
