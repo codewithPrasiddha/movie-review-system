@@ -30,6 +30,7 @@ All services communicate over a shared Docker network and are orchestrated via D
 
 ## Folder Structure
 
+```
 movie-review-system/
 ├── user-service/
 │   ├── app.py
@@ -50,7 +51,7 @@ movie-review-system/
 │   └── Dockerfile
 ├── docker-compose.yml
 └── .env
-
+```
 ## Getting Started
 
 ### 1. Clone the Repository
