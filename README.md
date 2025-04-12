@@ -1,35 +1,30 @@
+⸻
+
 Movie Review System
 
-A microservices-based application built with FastAPI, Docker, and PostgreSQL, allowing users to register, log in, add movies, and post reviews.
+A microservices-based project using FastAPI, Docker, PostgreSQL, and Kubernetes, allowing users to register, log in, add movies, and post reviews.
 
-Architecture Overview
+⸻
 
-The system consists of three microservices:
+⚙️ Architecture Overview
 
-Service	Description	Port
-User Service	Handles registration, login & JWT auth	8001
-Movie Service	Manages movie catalog	8002
-Review Service	Accepts and displays movie reviews	8003
+User Service     --> Handles user login, register, JWT (port 8001)
+Movie Service    --> Manages movie catalog (port 8002)
+Review Service   --> Handles movie reviews (port 8003)
+Database         --> PostgreSQL backend for user-service
+Prometheus       --> Monitors all services on port 9090
 
-All services run in isolated containers via Docker Compose and communicate over a shared Docker network.
 
-Technologies Used
-	•	Python 3.9
-	•	FastAPI
-	•	PostgreSQL (for User Service)
-	•	Docker & Docker Compose
-	•	Uvicorn
-	•	Pytest
-	•	dotenv
-	•	Prometheus (for monitoring)
 
-Folder Structure
+⸻
+
+🗂️ Folder Structure
 
 movie-review-system/
 ├── user-service/
 │   ├── app.py
-│   ├── database.py
 │   ├── models.py
+│   ├── database.py
 │   ├── requirements.txt
 │   ├── Dockerfile
 │   ├── wait-for-db.sh
@@ -51,13 +46,37 @@ movie-review-system/
 ├── prometheus.yml
 └── .env
 
-Setup Instructions
-	1.	Clone the Repository
+
+
+⸻
+
+📦 Technologies Used
+
+- Python 3.9
+- FastAPI
+- PostgreSQL (for user-service)
+- Docker & Docker Compose
+- Pytest
+- Uvicorn
+- Prometheus (for monitoring)
+- dotenv (.env management)
+
+
+
+⸻
+
+🚀 Getting Started
+
+1. Clone the Repository
 
 git clone https://github.com/yourusername/movie-review-system.git
 cd movie-review-system
 
-	2.	Create a .env File
+
+
+⸻
+
+2. Create .env File
 
 POSTGRES_DB=movie_review_db
 POSTGRES_USER=admin
@@ -68,55 +87,132 @@ BASE_URL_USER=http://user-service:8000
 BASE_URL_REVIEW=http://review-service:8000
 BASE_URL=http://movie-service:8000
 
-	3.	Start the Services
+
+
+⸻
+
+3. Start All Services
 
 docker compose up --build -d
 
-	4.	Check Service Health
 
-curl http://localhost:8001/health   # User Service
-curl http://localhost:8002/health   # Movie Service
-curl http://localhost:8003/health   # Review Service
 
-API Endpoints
+⸻
 
-User Service (port 8001)
-	•	POST /register – Register new user
-	•	POST /login – Obtain JWT token
-	•	GET /protected – Protected route (requires token)
-	•	GET /health – Health check
+4. Check Health of All Services
 
-Movie Service (port 8002)
-	•	POST /movies – Add a new movie
-	•	GET /movies – List all movies
-	•	GET /movies/{id} – Retrieve movie by ID
-	•	GET /health – Health check
+curl http://localhost:8001/health   # user-service
+curl http://localhost:8002/health   # movie-service
+curl http://localhost:8003/health   # review-service
 
-Review Service (port 8003)
-	•	POST /reviews – Submit a movie review
-	•	GET /reviews/{movie_id} – Get all reviews for a movie
-	•	GET /health – Health check
 
-Running Unit Tests
 
-To run all tests across services:
+⸻
 
+🔐 Authentication Flow
+
+# Register User
+curl -X POST http://localhost:8001/register \
+  -H "Content-Type: application/json" \
+  -d '{"username": "testuser", "password": "secretsanta"}'
+
+# Login to get JWT
+curl -X POST http://localhost:8001/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "testuser", "password": "secretsanta"}'
+
+# Use Token
+TOKEN=your_jwt_token_here
+
+# Access protected route
+curl http://localhost:8001/protected \
+  -H "Authorization: Bearer $TOKEN"
+
+
+
+⸻
+
+🎬 API Usage Commands
+
+# Add Movie
+curl -X POST http://localhost:8002/movies \
+  -H "Content-Type: application/json" \
+  -d '{"title": "Avengers", "genre": "Action", "director": "Marvel", "release_date": "2012"}'
+
+# Get All Movies
+curl http://localhost:8002/movies
+
+# Add Review
+curl -X POST http://localhost:8003/reviews \
+  -H "Content-Type: application/json" \
+  -d '{"movie_id": 1, "user": "testuser", "rating": 5, "comment": "Amazing!"}'
+
+# Get Reviews for Movie ID 1
+curl http://localhost:8003/reviews/1
+
+
+
+⸻
+
+✅ Running Unit Tests
+
+# Run All Tests
 pytest
 
-To run tests only for the user service:
-
+# Run user-service tests inside container
 docker exec user-service pytest -v
 
-Shut Down All Services
+
+
+⸻
+
+🧹 Shut Down All Services
 
 docker compose down
 
-Notes
-	•	Only the User Service uses PostgreSQL. Other services use in-memory dictionaries for simplicity.
-	•	All APIs are built with FastAPI and return clean JSON responses.
-	•	This project is meant for learning and demonstration purposes.
-	•	Monitoring is enabled via Prometheus at http://localhost:9090.
 
-License
 
-This project is open-source and free to use for educational purposes.
+⸻
+
+📊 Monitoring (Prometheus)
+
+# Access Prometheus UI
+http://localhost:9090
+
+# Check Metrics
+http://localhost:8001/metrics
+http://localhost:8002/metrics
+http://localhost:8003/metrics
+
+
+
+⸻
+
+📁 Kubernetes Files (Optional)
+
+kubectl apply -f user-service/deployment.yaml
+kubectl apply -f user-service/service.yaml
+kubectl apply -f user-service/user-service-hpa.yaml
+
+kubectl get pods
+kubectl get svc
+kubectl get hpa
+
+
+
+⸻
+
+📝 Notes
+
+- Only user-service uses PostgreSQL.
+- Movie and review services store data in memory.
+- All services are containerized and can be run together using Docker Compose.
+- Prometheus scrapes metrics from all services.
+
+
+
+⸻
+
+📜 License
+
+This project is open-source and free for educational use.
