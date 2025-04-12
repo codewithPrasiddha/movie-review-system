@@ -1,25 +1,20 @@
-⸻
+# Movie Review System
 
-Movie Review System
+A microservices-based project using **FastAPI**, **Docker**, **PostgreSQL**, and **Kubernetes**, allowing users to register, log in, add movies, and post reviews.
 
-A microservices-based project using FastAPI, Docker, PostgreSQL, and Kubernetes, allowing users to register, log in, add movies, and post reviews.
+## ⚙️ Architecture Overview
 
-⸻
-
-⚙️ Architecture Overview
-
+```bash
 User Service     --> Handles user login, register, JWT (port 8001)
 Movie Service    --> Manages movie catalog (port 8002)
 Review Service   --> Handles movie reviews (port 8003)
 Database         --> PostgreSQL backend for user-service
 Prometheus       --> Monitors all services on port 9090
+```
 
+## 🗂️ Folder Structure
 
-
-⸻
-
-🗂️ Folder Structure
-
+```bash
 movie-review-system/
 ├── user-service/
 │   ├── app.py
@@ -45,13 +40,11 @@ movie-review-system/
 ├── docker-compose.yml
 ├── prometheus.yml
 └── .env
+```
 
+## 📦 Technologies Used
 
-
-⸻
-
-📦 Technologies Used
-
+```bash
 - Python 3.9
 - FastAPI
 - PostgreSQL (for user-service)
@@ -60,24 +53,20 @@ movie-review-system/
 - Uvicorn
 - Prometheus (for monitoring)
 - dotenv (.env management)
+```
 
+## 🚀 Getting Started
 
+### 1. Clone the Repository
 
-⸻
-
-🚀 Getting Started
-
-1. Clone the Repository
-
+```bash
 git clone https://github.com/yourusername/movie-review-system.git
 cd movie-review-system
+```
 
+### 2. Create .env File
 
-
-⸻
-
-2. Create .env File
-
+```bash
 POSTGRES_DB=movie_review_db
 POSTGRES_USER=admin
 POSTGRES_PASSWORD=secretsanta0123
@@ -86,32 +75,26 @@ DATABASE_URL=postgresql://admin:secretsanta0123@movie-review-db:5432/movie_revie
 BASE_URL_USER=http://user-service:8000
 BASE_URL_REVIEW=http://review-service:8000
 BASE_URL=http://movie-service:8000
+```
 
+### 3. Start All Services
 
-
-⸻
-
-3. Start All Services
-
+```bash
 docker compose up --build -d
+```
 
+### 4. Check Health of All Services
 
-
-⸻
-
-4. Check Health of All Services
-
+```bash
 curl http://localhost:8001/health   # user-service
 curl http://localhost:8002/health   # movie-service
 curl http://localhost:8003/health   # review-service
+```
 
+## 🔐 Authentication Flow
 
-
-⸻
-
-🔐 Authentication Flow
-
-# Register User
+```bash
+# Register
 curl -X POST http://localhost:8001/register \
   -H "Content-Type: application/json" \
   -d '{"username": "testuser", "password": "secretsanta"}'
@@ -121,75 +104,59 @@ curl -X POST http://localhost:8001/login \
   -H "Content-Type: application/json" \
   -d '{"username": "testuser", "password": "secretsanta"}'
 
-# Use Token
-TOKEN=your_jwt_token_here
-
 # Access protected route
 curl http://localhost:8001/protected \
-  -H "Authorization: Bearer $TOKEN"
+  -H "Authorization: Bearer <JWT_TOKEN>"
+```
 
+## 🎬 Movie & Review API
 
-
-⸻
-
-🎬 API Usage Commands
-
-# Add Movie
+```bash
+# Add a Movie
 curl -X POST http://localhost:8002/movies \
   -H "Content-Type: application/json" \
   -d '{"title": "Avengers", "genre": "Action", "director": "Marvel", "release_date": "2012"}'
 
-# Get All Movies
+# Get Movies
 curl http://localhost:8002/movies
 
 # Add Review
 curl -X POST http://localhost:8003/reviews \
   -H "Content-Type: application/json" \
-  -d '{"movie_id": 1, "user": "testuser", "rating": 5, "comment": "Amazing!"}'
+  -d '{"movie_id": 1, "user": "testuser", "rating": 5, "comment": "Great!"}'
 
 # Get Reviews for Movie ID 1
 curl http://localhost:8003/reviews/1
+```
 
+## ✅ Unit Tests
 
-
-⸻
-
-✅ Running Unit Tests
-
-# Run All Tests
+```bash
+# Run tests for all services
 pytest
 
-# Run user-service tests inside container
+# Run from inside container
 docker exec user-service pytest -v
+```
 
+## 📊 Monitoring (Prometheus)
 
-
-⸻
-
-🧹 Shut Down All Services
-
-docker compose down
-
-
-
-⸻
-
-📊 Monitoring (Prometheus)
-
-# Access Prometheus UI
-http://localhost:9090
-
-# Check Metrics
+```bash
+http://localhost:9090  # Prometheus UI
 http://localhost:8001/metrics
 http://localhost:8002/metrics
 http://localhost:8003/metrics
+```
 
+## 🧹 Shutdown Services
 
+```bash
+docker compose down
+```
 
-⸻
+## 🗃️ Kubernetes Commands
 
-📁 Kubernetes Files (Optional)
-
+```bash
 kubectl apply -f user-service/deployment.yaml
 kubectl apply -f user-service/service.yaml
 kubectl apply -f user-service/user-service-hpa.yaml
@@ -197,22 +164,8 @@ kubectl apply -f user-service/user-service-hpa.yaml
 kubectl get pods
 kubectl get svc
 kubectl get hpa
+```
 
+## 📜 License
 
-
-⸻
-
-📝 Notes
-
-- Only user-service uses PostgreSQL.
-- Movie and review services store data in memory.
-- All services are containerized and can be run together using Docker Compose.
-- Prometheus scrapes metrics from all services.
-
-
-
-⸻
-
-📜 License
-
-This project is open-source and free for educational use.
+Open-source for learning and demonstration use.
